@@ -1,6 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+sf::Sprite getSprite(int);
+sf::Sprite spritemap[16][16];
+void writeChar(int);
+int cursorX,cursorY;
+sf::RenderWindow App;
+
 int main()
 {
   // Create the main rendering window
@@ -13,6 +19,13 @@ int main()
     // Error...
   }
   
+  for (int i = 0; i != 16; ++i){
+    for (int j = 0; j != 16; ++j){
+      spritemap[i][j].SetImage(Image);
+      spritemap[i][j].SetSubRect(sf::IntRect(i*8, j*8, (i+1)*8, (j+1)*8));
+    }
+  }
+
   sf::Sprite Sprite;
   Sprite.SetImage(Image);
   Sprite.SetPosition(0, 0);
@@ -41,11 +54,11 @@ int main()
 
     // Display contents
     // Should probably make some functions to make this neat
-    for (int i = 0; i != 16; ++i){
+    /*for (int i = 0; i != 16; ++i){
       Sprite.SetSubRect(sf::IntRect(i*8, 16, (i+1)*8, 24));
       Sprite.SetPosition(i*8, 16);
       App.Draw(Sprite);
-    }
+    }*/
 
     // Shitty brute-force AWESOMENESS
     Sprite.SetSubRect(sf::IntRect(64, 16, 72, 24));
@@ -76,7 +89,37 @@ int main()
     Sprite.SetPosition(64, 0);
     App.Draw(Sprite);
 
+    Sprite = getSprite(1);
+    Sprite.SetPosition(72,0);
+    App.Draw(Sprite);
+
+    cursorX = 0;
+    cursorY = 4;
+    for (int i = 0;i != 256;++i){
+      Sprite = getSprite(i);
+      if (cursorX == 16){
+        cursorX = 0;
+        cursorY++;}
+      Sprite.SetPosition(cursorX*8, cursorY*8);
+      App.Draw(Sprite);
+      cursorX++;
+    }
+
     App.Display();
   }
   return EXIT_SUCCESS;
+}
+
+sf::Sprite getSprite(int c){
+  int x = c % 16;
+  int y = c / 16;
+  return spritemap[x][y];
+}
+
+void writeChar(int c){
+  sf::Sprite s;
+  s = getSprite(c);
+  s.SetPosition(cursorX*8, cursorY*8);
+  App.Draw(s);
+  cursorX++;
 }
