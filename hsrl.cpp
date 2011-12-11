@@ -6,6 +6,7 @@ sf::Sprite spritemap[16][16];
 void writeChar(int);
 int cursorX,cursorY;
 sf::RenderWindow App;
+int width = 16;
 
 int main()
 {
@@ -62,13 +63,7 @@ int main()
     cursorX = 0;
     cursorY = 4;
     for (int i = 0;i != 256;++i){
-      Sprite = getSprite(i);
-      if (cursorX == 16){
-        cursorX = 0;
-        cursorY++;}
-      Sprite.SetPosition(cursorX*8, cursorY*8);
-      App.Draw(Sprite);
-      cursorX++;
+      writeChar(i);
     }
 
     App.Display();
@@ -85,6 +80,9 @@ sf::Sprite getSprite(int c){
 void writeChar(int c){
   sf::Sprite s;
   s = getSprite(c);
+  if (cursorX == width){
+    cursorX = 0;
+    cursorY++;}
   s.SetPosition(cursorX*8, cursorY*8);
   App.Draw(s);
   cursorX++;
