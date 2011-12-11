@@ -80,7 +80,7 @@ sf::Sprite getSprite(int c){
 void writeChar(int c){
   sf::Sprite s;
   s = getSprite(c);
-  if (cursorX == width){
+  if (cursorX == 16){
     cursorX = 0;
     cursorY++;}
   s.SetPosition(cursorX*8, cursorY*8);
