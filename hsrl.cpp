@@ -19,6 +19,7 @@ int main()
     // Error...
   }
   
+  // Creates spritemap so each image bit gets its own sprite
   for (int i = 0; i != 16; ++i){
     for (int j = 0; j != 16; ++j){
       spritemap[i][j].SetImage(Image);
@@ -53,41 +54,6 @@ int main()
     App.Clear(sf::Color(255, 255, 255));
 
     // Display contents
-    // Should probably make some functions to make this neat
-    /*for (int i = 0; i != 16; ++i){
-      Sprite.SetSubRect(sf::IntRect(i*8, 16, (i+1)*8, 24));
-      Sprite.SetPosition(i*8, 16);
-      App.Draw(Sprite);
-    }*/
-
-    // Shitty brute-force AWESOMENESS
-    Sprite.SetSubRect(sf::IntRect(64, 16, 72, 24));
-    Sprite.SetPosition(0, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(120, 16, 128, 24));
-    Sprite.SetPosition(8, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(104, 16, 112, 24));
-    Sprite.SetPosition(16, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(40, 16, 48, 24));
-    Sprite.SetPosition(24, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(24, 24, 32, 32));
-    Sprite.SetPosition(32, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(32, 24, 40, 32));
-    Sprite.SetPosition(40, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(40, 24, 48, 32));
-    Sprite.SetPosition(48, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(24, 16, 32, 24));
-    Sprite.SetPosition(56, 0);
-    App.Draw(Sprite);
-    Sprite.SetSubRect(sf::IntRect(88, 16, 96, 24));
-    Sprite.SetPosition(64, 0);
-    App.Draw(Sprite);
 
     Sprite = getSprite(1);
     Sprite.SetPosition(72,0);
