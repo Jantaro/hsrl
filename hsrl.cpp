@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-sf::Sprite getSprite(int);
+sf::Sprite getSprite(int, const sf::Sprite[16][16]);
 sf::Sprite spritemap[16][16];
 void writeChar(int);
 int cursorX,cursorY;
@@ -53,16 +53,17 @@ int main()
     // Clear the screen
     App.Clear(sf::Color(255, 255, 255));
 
-    // Display contents
-
-    Sprite = getSprite(1);
-    Sprite.SetPosition(72,0);
-    App.Draw(Sprite);
 
     cursorX = 0;
     cursorY = 4;
-    for (int i = 0; i != 256;++i){
-      writeChar(i);
+    for (int i = 0;i != 256;++i){
+      Sprite = getSprite(i, spritemap);
+      if (cursorX == 16){
+        cursorX = 0;
+        cursorY++;}
+      Sprite.SetPosition(cursorX*8, cursorY*8);
+      App.Draw(Sprite);
+      cursorX++;
     }
 
     App.Display();
@@ -70,12 +71,10 @@ int main()
   return EXIT_SUCCESS;
 }
 
-sf::Sprite getSprite(int c){
-  int x = c % 16;
-  int y = c / 16;
-  return spritemap[x][y];
+sf::Sprite getSprite(int c, const sf::Sprite map[16][16]){
+  return map[c%16][c/16];
 }
-
+/*
 void writeChar(int c){
   sf::Sprite s;
   s = getSprite(c);
@@ -85,4 +84,4 @@ void writeChar(int c){
   s.SetPosition(cursorX*8, cursorY*8);
   App.Draw(s);
   cursorX++;
-}
+} */
