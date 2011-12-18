@@ -2,9 +2,7 @@
 #include <iostream>
 
 sf::Sprite getSprite(int, const sf::Sprite[16][16]);
-sf::Sprite spritemap[16][16];
-void writeChar(int);
-int cursorX,cursorY;
+void writeTiles(const sf::Sprite[16][16], sf::RenderWindow&);
 sf::RenderWindow App;
 
 int main()
@@ -19,6 +17,7 @@ int main()
     // Error...
   }
   
+  sf::Sprite spritemap[16][16];
   // Creates spritemap so each image bit gets its own sprite
   for (int i = 0; i != 16; ++i){
     for (int j = 0; j != 16; ++j){
@@ -34,7 +33,6 @@ int main()
   // Start game loop
   while (App.IsOpened())
   {
-    // Process events
     sf::Event Event;
     while (App.GetEvent(Event))
     {
@@ -53,19 +51,14 @@ int main()
     // Clear the screen
     App.Clear(sf::Color(255, 255, 255));
 
-
+/*
     cursorX = 0;
-    cursorY = 4;
+    cursorY = 0;
     for (int i = 0;i != 256;++i){
-      Sprite = getSprite(i, spritemap);
-      if (cursorX == 16){
-        cursorX = 0;
-        cursorY++;}
-      Sprite.SetPosition(cursorX*8, cursorY*8);
-      App.Draw(Sprite);
-      cursorX++;
+      writeChar(i, spritemap);
     }
-
+*/
+    writeTiles(spritemap, App);
     App.Display();
   }
   return EXIT_SUCCESS;
@@ -74,14 +67,32 @@ int main()
 sf::Sprite getSprite(int c, const sf::Sprite map[16][16]){
   return map[c%16][c/16];
 }
-/*
-void writeChar(int c){
+void writeTiles(const sf::Sprite map[16][16], sf::RenderWindow& window){
   sf::Sprite s;
-  s = getSprite(c);
+  int cursorX = 0;
+  int cursorY = 0;  
+  for (int i = 0;i != 256;++i){    
+    s = getSprite(i, map);
+    if (cursorX == 16){
+      cursorX = 0;
+      cursorY++;
+    }
+//    std::cout << "x:" << cursorX << " y:" << cursorY << std::endl;
+    s.SetPosition(cursorX*8, cursorY*8);
+    window.Draw(s);
+    cursorX++;
+  }
+} 
+/*
+void writeChar(int c, const sf::Sprite map[16][16]){
+  sf::Sprite s;
+  s = getSprite(c, map);
   if (cursorX == 16){
     cursorX = 0;
-    cursorY++;}
+    cursorY++;
+  }
   s.SetPosition(cursorX*8, cursorY*8);
   App.Draw(s);
   cursorX++;
-} */
+}
+*/
