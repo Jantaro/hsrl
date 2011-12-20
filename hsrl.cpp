@@ -2,7 +2,7 @@
 #include <iostream>
 
 sf::Sprite getSprite(int, const sf::Sprite[16][16]);
-void writeChar(int, const sf::Sprite[16][16], sf::RenderWindow&);
+void writeChar(int, int, int, const sf::Sprite[16][16], sf::RenderWindow&);
 int cursorX;
 int cursorY;
 sf::RenderWindow App;
@@ -19,8 +19,8 @@ int main()
     // Error...
   }
   
-  sf::Sprite spritemap[16][16];
   // Creates spritemap so each image bit gets its own sprite
+  sf::Sprite spritemap[16][16]; 
   for (int i = 0; i != 16; ++i){
     for (int j = 0; j != 16; ++j){
       spritemap[i][j].SetImage(Image);
@@ -57,7 +57,7 @@ int main()
     cursorX = 0;
     cursorY = 0;
     for (int i = 0;i != 256;++i){
-      writeChar(i, spritemap, App);
+      writeChar(i, 0, 16, spritemap, App);
     }
 
     App.Display();
@@ -69,11 +69,11 @@ sf::Sprite getSprite(int c, const sf::Sprite map[16][16]){
   return map[c%16][c/16];
 }
 
-void writeChar(int c, const sf::Sprite map[16][16], sf::RenderWindow& window){
+void writeChar(int c, int start, int length, const sf::Sprite map[16][16], sf::RenderWindow& window){
   sf::Sprite s;
   s = getSprite(c, map);
-  if (cursorX == 16){
-    cursorX = 0;
+  if (cursorX == length){
+    cursorX = start;
     cursorY++;
   }
   s.SetPosition(cursorX*8, cursorY*8);
