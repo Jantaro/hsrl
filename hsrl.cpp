@@ -54,10 +54,10 @@ int main()
     App.Clear(sf::Color(255, 255, 255));
 
 
-    cursorX = 0;
+    cursorX = 3;
     cursorY = 0;
     for (int i = 0;i != 256;++i){
-      writeChar(i, 0, 16, spritemap, App);
+      writeChar(i, 3, 16, spritemap, App);
     }
 
     App.Display();
@@ -72,7 +72,7 @@ sf::Sprite getSprite(int c, const sf::Sprite map[16][16]){
 void writeChar(int c, int start, int length, const sf::Sprite map[16][16], sf::RenderWindow& window){
   sf::Sprite s;
   s = getSprite(c, map);
-  if (cursorX == length){
+  if (cursorX == length + start){
     cursorX = start;
     cursorY++;
   }
