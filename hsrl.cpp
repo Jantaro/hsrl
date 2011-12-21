@@ -32,6 +32,11 @@ int main()
   Sprite.SetImage(Image);
   Sprite.SetPosition(0, 0);
 
+  // writeRect testing parameters
+  int curX = 0;
+  int curY = 0;
+  int width = 16;
+
   // Start game loop
   while (App.IsOpened())
   {
@@ -42,12 +47,13 @@ int main()
       if (Event.Type == sf::Event::Closed)
         App.Close();
 
-      // Move the sprite
-      // Pretty useless at this point
-      if (App.GetInput().IsKeyDown(sf::Key::Left))  Sprite.Move(-8, 0);
-      if (App.GetInput().IsKeyDown(sf::Key::Right)) Sprite.Move( 8, 0);
-      if (App.GetInput().IsKeyDown(sf::Key::Up))    Sprite.Move(0, -8);
-      if (App.GetInput().IsKeyDown(sf::Key::Down))  Sprite.Move(0,  8);
+      // Testing (currently for writeRect)
+      if (App.GetInput().IsKeyDown(sf::Key::Left))  curX--;
+      if (App.GetInput().IsKeyDown(sf::Key::Right)) curX++;
+      if (App.GetInput().IsKeyDown(sf::Key::Up))    curY--;
+      if (App.GetInput().IsKeyDown(sf::Key::Down))  curY++;
+      if (App.GetInput().IsKeyDown(sf::Key::N))     width--;
+      if (App.GetInput().IsKeyDown(sf::Key::M))     width++;
     }
 
     // Clear the screen
@@ -61,7 +67,7 @@ int main()
       writeChar(i, 3, 16, spritemap, App);
     }*/
 
-    writeRect(4, 8, 3, spritemap, App);
+    writeRect(curX, width, curY, spritemap, App);
 
     App.Display();
   }
