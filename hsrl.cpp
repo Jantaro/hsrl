@@ -3,9 +3,9 @@
 
 sf::Sprite getSprite(int, const sf::Sprite[16][16]);
 void writeChar(int, int, int, const sf::Sprite[16][16], sf::RenderWindow&);
+void writeRect(int, int, int, const sf::Sprite[16][16], sf::RenderWindow&);
 int cursorX;
 int cursorY;
-sf::RenderWindow App;
 
 int main()
 {
@@ -54,11 +54,14 @@ int main()
     App.Clear(sf::Color(255, 255, 255));
 
 
+    /*
     cursorX = 3;
     cursorY = 0;
     for (int i = 0;i != 256;++i){
       writeChar(i, 3, 16, spritemap, App);
-    }
+    }*/
+
+    writeRect(4, 8, 3, spritemap, App);
 
     App.Display();
   }
@@ -81,3 +84,10 @@ void writeChar(int c, int start, int length, const sf::Sprite map[16][16], sf::R
   cursorX++;
 }
 
+void writeRect(int xi, int xl, int yi, const sf::Sprite map[16][16], sf::RenderWindow& window){
+  cursorX = xi;
+  cursorY = yi;
+  for (int i = 0;i != 256;++i){
+    writeChar(i, xi, xl, map, window);
+  }
+}
