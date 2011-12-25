@@ -15,10 +15,7 @@ int main()
 
   sf::Image Image;
   Image.SetSmooth(false);
-  if (!Image.LoadFromFile("tileset.png"))
-  {
-    // Error...
-  }
+  Image.LoadFromFile("tileset.png");
   
   vector<vector<Sprite> > spriteMap(16, vector<Sprite>(16));
   // Creates spritemap so each image bit gets its own sprite
