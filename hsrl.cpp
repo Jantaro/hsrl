@@ -80,7 +80,7 @@ void drawMap(vector<vector<int> > v, const vector<vector<Sprite> > map, sf::Rend
   int c;
   Sprite s;
   for (int i = 0;i != 256;++i){
-    c = v[i/16][i%16];
+    c = v[i/16][i%16]; // vector[row][element] or v[y][x]
     s = map[c/16][c%16];
     if (cursorX == 16){
       cursorX = 0;

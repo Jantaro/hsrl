@@ -1,0 +1,12 @@
+Map
+  variable size
+  store more information
+
+Display
+  colored sprites
+  scrolled map
+  messages
+
+I/O
+  debugging output
+  keyboard commands
