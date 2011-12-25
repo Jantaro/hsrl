@@ -10,3 +10,7 @@ Display
 I/O
   debugging output
   keyboard commands
+
+Project
+  find what libraries need to be installed
+  set up build automation
