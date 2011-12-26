@@ -37,7 +37,6 @@ int main()
         App.Close();
 
       // Move the sprite
-      // Pretty useless at this point 
 /*    if (App.GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-8, 0);
       if (App.GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 8, 0);
       if (App.GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -8);
@@ -68,6 +67,7 @@ int main()
     }; */
 
     drawMap(charMap, spriteMap, App);
+
 
     App.Display();
   }
