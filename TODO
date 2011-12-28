@@ -1,3 +1,6 @@
+Bugs
+  segfault when moving off the map
+
 Map
   variable size
   store more information
@@ -6,6 +9,7 @@ Display
   colored sprites
   scrolled map
   messages
+  pretty walls
 
 I/O
   debugging output
