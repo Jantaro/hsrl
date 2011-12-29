@@ -111,7 +111,7 @@ void drawMap(pair<int, int> pos, vector<vector<int> > v, const vector<vector<Spr
     cursorX++; 
   }
   // draw player cursor
-  s = map[2][0]; // @ symbol
+  s = map[4][0]; // @ symbol
   s.SetPosition(pos.first*8, pos.second*8);
   window.Draw(s);
 }
@@ -144,7 +144,7 @@ void drawMessage(string m, const vector<vector<Sprite> > map, sf::RenderWindow& 
   int messageY = 0;
   for (string::iterator p=m.begin(); p!=(m.end()+1);++p){
     s = map[(*p)/16][(*p)%16];
-    s.SetPosition(messageX+(std::distance(m.begin(),p))*8, messageY*8);
+    s.SetPosition((messageX+(std::distance(m.begin(),p)))*8, messageY*8);
     window.Draw(s);
   }
 }
