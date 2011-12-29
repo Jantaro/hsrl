@@ -8,16 +8,22 @@ using std::vector;
 using std::pair;
 #include <algorithm>
 using std::binary_search;
+using std::string;
+#include <sstream>
 
 void drawMap(pair<int, int>, vector<vector<int> >, const vector<vector<Sprite> >, sf::RenderWindow&);
 vector<vector<int> > readMap();
 bool impossible(pair<int, int>, vector<vector<int> >);
+void drawMessage(string, const vector<vector<Sprite> >, sf::RenderWindow&);
 vector<int> range(int, int);
+template <class T> inline std::string to_string(const T&);
 
 int main()
 {
   // Create the main rendering window
   sf::RenderWindow App(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::Close);
+
+  App.SetFramerateLimit(30); // hardcoded framerate
 
   sf::Image Image;
   Image.SetSmooth(false);
@@ -33,6 +39,7 @@ int main()
   }
 
   pair<int, int> playerPos(0,0);
+  string framerateText;
 
   vector<vector<int> > charMap = readMap(); /* 
   {
@@ -79,6 +86,8 @@ int main()
 
     drawMap(playerPos, charMap, spriteMap, App);
 
+    framerateText = to_string(1/App.GetFrameTime());
+    drawMessage(framerateText, spriteMap, App);
 
     App.Display();
   }
@@ -111,7 +120,7 @@ vector<vector<int> > readMap(){
   std::ifstream f("map.txt");
   vector<vector<int> > charMap;
   if (f){
-    for (int y=0; y !=16; ++y){
+    for (int y=0; y !=16; ++y){ // hardcoded size 16x16
       vector<int> row;
       for (int x=0; x !=16; ++x){
         row.push_back(f.get());
@@ -129,6 +138,17 @@ bool impossible(pair<int, int> pos, vector<vector<int> > v){
   return binary_search(wallChars.begin(), wallChars.end(), c);
 }
 
+void drawMessage(string m, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+  Sprite s;
+  int messageX = 16; // hardcoded position
+  int messageY = 0;
+  for (string::iterator p=m.begin(); p!=(m.end()+1);++p){
+    s = map[(*p)/16][(*p)%16];
+    s.SetPosition(messageX+(std::distance(m.begin(),p))*8, messageY*8);
+    window.Draw(s);
+  }
+}
+
 vector<int> range(int start, int end){
   vector<int> v;
   if (start < end){
@@ -143,4 +163,12 @@ vector<int> range(int start, int end){
   }
   else v.push_back(start); // just use the value if they are equal
   return v;
+}
+
+template <class T>
+inline std::string to_string (const T& t)
+{
+std::stringstream ss;
+ss << t;
+return ss.str();
 }
