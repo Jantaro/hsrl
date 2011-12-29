@@ -17,7 +17,7 @@ vector<int> range(int, int);
 int main()
 {
   // Create the main rendering window
-  sf::RenderWindow App(sf::VideoMode(512, 512, 32), "HSRL");
+  sf::RenderWindow App(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::Close);
 
   sf::Image Image;
   Image.SetSmooth(false);
