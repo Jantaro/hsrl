@@ -11,11 +11,15 @@ using std::binary_search;
 using std::string;
 #include <sstream>
 
-vector<vector<int> > readMap();
-void drawMap(const vector<vector<int> >&, const vector<vector<Sprite> >&, sf::RenderWindow&);
-void drawObject(int, const pair<int, int>&, const vector<vector<Sprite> >&, sf::RenderWindow&);
-bool impossible(const pair<int, int>&, const vector<vector<int> >&);
-void drawMessage(string, const vector<vector<Sprite> >&, sf::RenderWindow&);
+typedef vector<vector<int> > Map;
+typedef vector<vector<Sprite> > Tileset;
+typedef pair<int, int> Coords;
+
+Map readMap();
+void drawMap(const Map&, const Tileset&, sf::RenderWindow&);
+void drawObject(int, const Coords&, const Tileset&, sf::RenderWindow&);
+bool impossible(const Coords&, const Map&);
+void drawMessage(string, const Tileset&, sf::RenderWindow&);
 vector<int> range(int, int);
 template <class T> inline std::string to_string(const T&);
 
@@ -30,7 +34,7 @@ int main()
   Image.SetSmooth(false);
   Image.LoadFromFile("tileset.png");
   
-  vector<vector<Sprite> > spriteMap(16, vector<Sprite>(16));
+  Tileset spriteMap(16, vector<Sprite>(16));
   // Creates spritemap so each image bit gets its own sprite
   for (int y = 0; y != 16; ++y){
     for (int x = 0; x != 16; ++x){
@@ -39,10 +43,10 @@ int main()
     }
   }
 
-  pair<int, int> playerPos(0,0);
+  Coords playerPos(0,0);
   string framerateText;
 
-  vector<vector<int> > charMap = readMap(); 
+  Map charMap = readMap(); 
 
   // Start game loop
   while (App.IsOpened())
@@ -54,7 +58,7 @@ int main()
       if (Event.Type == sf::Event::Closed)
         App.Close();
 
-      pair<int, int> oldPos = playerPos;
+      Coords oldPos = playerPos;
       // Try to move the player
       if (App.GetInput().IsKeyDown(sf::Key::Left))  playerPos.first--;
       if (App.GetInput().IsKeyDown(sf::Key::Right)) playerPos.first++;
@@ -78,9 +82,9 @@ int main()
   return EXIT_SUCCESS;
 }
 
-vector<vector<int> > readMap(){
+Map readMap(){
   std::ifstream f("map.txt");
-  vector<vector<int> > charMap;
+  Map charMap;
   if (f){
     for (int y=0; y !=16; ++y){ // hardcoded size 16x16
       vector<int> row;
@@ -94,7 +98,7 @@ vector<vector<int> > readMap(){
   return charMap;
 }
 
-void drawMap(const vector<vector<int> >& v, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
+void drawMap(const Map& v, const Tileset& map, sf::RenderWindow& window){
   int cursorX = 0;
   int cursorY = 0;
   int c;
@@ -112,14 +116,14 @@ void drawMap(const vector<vector<int> >& v, const vector<vector<Sprite> >& map, 
   }
 }
 
-void drawObject(int c, const pair<int, int>& pos, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
+void drawObject(int c, const Coords& pos, const Tileset& map, sf::RenderWindow& window){
   Sprite s;
   s = map[c/16][c%16];
   s.SetPosition(pos.first*8, pos.second*8);
   window.Draw(s);
 }
 
-bool impossible(const pair<int, int>& pos, const vector<vector<int> >& v){
+bool impossible(const Coords& pos, const Map& v){
   int lowerXBound = 0; // hardcoded size
   int upperXBound = 15;
   int lowerYBound = 0;
@@ -135,7 +139,7 @@ bool impossible(const pair<int, int>& pos, const vector<vector<int> >& v){
   else return false;
 }
 
-void drawMessage(string m, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
+void drawMessage(string m, const Tileset& map, sf::RenderWindow& window){
   Sprite s;
   int messageX = 16; // hardcoded position
   int messageY = 0;
