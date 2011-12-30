@@ -12,10 +12,10 @@ using std::string;
 #include <sstream>
 
 vector<vector<int> > readMap();
-void drawMap(vector<vector<int> >, const vector<vector<Sprite> >, sf::RenderWindow&);
-void drawObject(int, pair<int, int>, const vector<vector<Sprite> >, sf::RenderWindow&);
-bool impossible(pair<int, int>, vector<vector<int> >);
-void drawMessage(string, const vector<vector<Sprite> >, sf::RenderWindow&);
+void drawMap(const vector<vector<int> >&, const vector<vector<Sprite> >&, sf::RenderWindow&);
+void drawObject(int, const pair<int, int>&, const vector<vector<Sprite> >&, sf::RenderWindow&);
+bool impossible(const pair<int, int>&, const vector<vector<int> >&);
+void drawMessage(string, const vector<vector<Sprite> >&, sf::RenderWindow&);
 vector<int> range(int, int);
 template <class T> inline std::string to_string(const T&);
 
@@ -94,7 +94,7 @@ vector<vector<int> > readMap(){
   return charMap;
 }
 
-void drawMap(vector<vector<int> > v, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+void drawMap(const vector<vector<int> >& v, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
   int cursorX = 0;
   int cursorY = 0;
   int c;
@@ -112,14 +112,14 @@ void drawMap(vector<vector<int> > v, const vector<vector<Sprite> > map, sf::Rend
   }
 }
 
-void drawObject(int c, pair<int, int> pos, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+void drawObject(int c, const pair<int, int>& pos, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
   Sprite s;
   s = map[c/16][c%16];
   s.SetPosition(pos.first*8, pos.second*8);
   window.Draw(s);
 }
 
-bool impossible(pair<int, int> pos, vector<vector<int> > v){
+bool impossible(const pair<int, int>& pos, const vector<vector<int> >& v){
   int lowerXBound = 0; // hardcoded size
   int upperXBound = 15;
   int lowerYBound = 0;
@@ -135,7 +135,7 @@ bool impossible(pair<int, int> pos, vector<vector<int> > v){
   else return false;
 }
 
-void drawMessage(string m, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+void drawMessage(string m, const vector<vector<Sprite> >& map, sf::RenderWindow& window){
   Sprite s;
   int messageX = 16; // hardcoded position
   int messageY = 0;
