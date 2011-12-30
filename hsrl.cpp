@@ -11,8 +11,9 @@ using std::binary_search;
 using std::string;
 #include <sstream>
 
-void drawMap(pair<int, int>, vector<vector<int> >, const vector<vector<Sprite> >, sf::RenderWindow&);
 vector<vector<int> > readMap();
+void drawMap(vector<vector<int> >, const vector<vector<Sprite> >, sf::RenderWindow&);
+void drawObject(int, pair<int, int>, const vector<vector<Sprite> >, sf::RenderWindow&);
 bool impossible(pair<int, int>, vector<vector<int> >);
 void drawMessage(string, const vector<vector<Sprite> >, sf::RenderWindow&);
 vector<int> range(int, int);
@@ -66,7 +67,8 @@ int main()
     // Clear the screen
     App.Clear(sf::Color(255, 255, 255));
 
-    drawMap(playerPos, charMap, spriteMap, App);
+    drawMap(charMap, spriteMap, App);
+    drawObject('@', playerPos, spriteMap, App);
 
     framerateText = to_string(1/App.GetFrameTime());
     drawMessage(framerateText, spriteMap, App);
@@ -74,28 +76,6 @@ int main()
     App.Display();
   }
   return EXIT_SUCCESS;
-}
-
-void drawMap(pair<int, int> pos, vector<vector<int> > v, const vector<vector<Sprite> > map, sf::RenderWindow& window){
-  int cursorX = 0;
-  int cursorY = 0;
-  int c;
-  Sprite s;
-  for (int i = 0;i != 256;++i){
-    c = v[i/16][i%16]; // vector[row][element] or v[y][x]
-    s = map[c/16][c%16];
-    if (cursorX == 16){
-      cursorX = 0;
-      cursorY++;
-    }
-    s.SetPosition(cursorX*8, cursorY*8);
-    window.Draw(s);
-    cursorX++; 
-  }
-  // draw player cursor
-  s = map[4][0]; // @ symbol
-  s.SetPosition(pos.first*8, pos.second*8);
-  window.Draw(s);
 }
 
 vector<vector<int> > readMap(){
@@ -112,6 +92,31 @@ vector<vector<int> > readMap(){
     }
   }
   return charMap;
+}
+
+void drawMap(vector<vector<int> > v, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+  int cursorX = 0;
+  int cursorY = 0;
+  int c;
+  Sprite s;
+  for (int i = 0;i != 256;++i){
+    c = v[i/16][i%16]; // vector[row][element] or v[y][x]
+    s = map[c/16][c%16];
+    if (cursorX == 16){
+      cursorX = 0;
+      cursorY++;
+    }
+    s.SetPosition(cursorX*8, cursorY*8);
+    window.Draw(s);
+    cursorX++; 
+  }
+}
+
+void drawObject(int c, pair<int, int> pos, const vector<vector<Sprite> > map, sf::RenderWindow& window){
+  Sprite s;
+  s = map[c/16][c%16];
+  s.SetPosition(pos.first*8, pos.second*8);
+  window.Draw(s);
 }
 
 bool impossible(pair<int, int> pos, vector<vector<int> > v){
