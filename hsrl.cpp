@@ -115,9 +115,19 @@ vector<vector<int> > readMap(){
 }
 
 bool impossible(pair<int, int> pos, vector<vector<int> > v){
-  int c = v[pos.second][pos.first];
-  vector<int> wallChars = range(0x71,0x7F);
-  return binary_search(wallChars.begin(), wallChars.end(), c);
+  int lowerXBound = 0; // hardcoded size
+  int upperXBound = 15;
+  int lowerYBound = 0;
+  int upperYBound = 15;
+  int playerX = pos.first;
+  int playerY = pos.second;
+  // bounds must be checked before v is indexed with invalid values
+  if (playerX < lowerXBound || playerX > upperXBound ||
+      playerY < lowerYBound || playerY > upperYBound)
+    return true;
+  int c = v[playerY][playerX]; // segfaults if player is somehow outside map
+  if (c == 0x77) return true; // 'w' character for wall
+  else return false;
 }
 
 void drawMessage(string m, const vector<vector<Sprite> > map, sf::RenderWindow& window){
