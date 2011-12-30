@@ -4,6 +4,7 @@ Compile:
   g++ -O2 -Wall -Wextra -std=c++0x -pedantic -lsfml-graphics -lsfml-window -lsfml-system hsrl.cpp -o hsrl
 
 Dependencies:
-  SFML
+  SFML 1.6
+    libsfml-dev
   gcc
   TODO: find what other libraries are needed
