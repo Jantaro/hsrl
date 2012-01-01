@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 using sf::Sprite;
+using sf::RenderWindow;
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,25 +9,32 @@ using std::vector;
 using std::pair;
 #include <algorithm>
 using std::binary_search;
-using std::string;
 #include <sstream>
 
+using std::string; 
+
+
+
 typedef vector<vector<int> > Map;
-typedef vector<vector<Sprite> > Tileset;
+typedef vector<vector<Sprite> > SpriteMap;
 typedef pair<int, int> Coords;
 
 Map readMap();
-void drawMap(const Map&, const Tileset&, sf::RenderWindow&);
-void drawObject(int, const Coords&, const Tileset&, sf::RenderWindow&);
+void drawMap(const Map&, const SpriteMap&, RenderWindow&);
+void drawObject(int, const Coords&, const SpriteMap&, RenderWindow&);
 bool impossible(const Coords&, const Map&);
-void drawMessage(string, const Tileset&, sf::RenderWindow&);
+void drawMessage(string, const SpriteMap&, RenderWindow&);
 vector<int> range(int, int);
-template <class T> inline std::string to_string(const T&);
+template <class T> inline string to_string(const T&);
 
 int main()
 {
-  // Create the main rendering window
-  sf::RenderWindow App(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::Close);
+  ////
+  //  Initialization of variables
+  ////
+  
+  // create the main rendering window
+  RenderWindow App(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::Close);
 
   App.SetFramerateLimit(30); // hardcoded framerate
 
@@ -34,53 +42,65 @@ int main()
   Image.SetSmooth(false);
   Image.LoadFromFile("tileset.png");
   
-  Tileset spriteMap(16, vector<Sprite>(16));
-  // Creates spritemap so each image bit gets its own sprite
+  SpriteMap tileset(16, vector<Sprite>(16));
+  // creates spritemap so each image bit gets its own sprite
   for (int y = 0; y != 16; ++y){
     for (int x = 0; x != 16; ++x){
-      spriteMap[y][x].SetImage(Image);
-      spriteMap[y][x].SetSubRect(sf::IntRect(x*8, y*8, (x+1)*8, (y+1)*8));
+      tileset[y][x].SetImage(Image);
+      tileset[y][x].SetSubRect(sf::IntRect(x*8, y*8, (x+1)*8, (y+1)*8));
     }
   }
 
-  Coords playerPos(0,0);
+  Coords playerPos(0,0); // hardcoded initial player position
   string framerateText;
 
-  Map charMap = readMap(); 
+  Map charMap = readMap();
 
-  // Start game loop
+
+
+  ////
+  //  Main game loop
+  ////
+
+  // start game loop
   while (App.IsOpened())
   {
     sf::Event Event;
     while (App.GetEvent(Event))
     {
-      // Close window
+      // close window
       if (Event.Type == sf::Event::Closed)
         App.Close();
 
       Coords oldPos = playerPos;
-      // Try to move the player
+      // try to move the player
       if (App.GetInput().IsKeyDown(sf::Key::Left))  playerPos.first--;
       if (App.GetInput().IsKeyDown(sf::Key::Right)) playerPos.first++;
       if (App.GetInput().IsKeyDown(sf::Key::Up))    playerPos.second--;
       if (App.GetInput().IsKeyDown(sf::Key::Down))  playerPos.second++;
-      // Reset position if the destination was impossible
+      // ceset position if the destination was impossible
       if (impossible(playerPos, charMap)) playerPos = oldPos;
     }
 
-    // Clear the screen
+    // clear the screen
     App.Clear(sf::Color(255, 255, 255));
 
-    drawMap(charMap, spriteMap, App);
-    drawObject('@', playerPos, spriteMap, App);
+    drawMap(charMap, tileset, App);
+    drawObject('@', playerPos, tileset, App);
 
     framerateText = to_string(1/App.GetFrameTime());
-    drawMessage(framerateText, spriteMap, App);
+    drawMessage(framerateText, tileset, App);
 
     App.Display();
   }
   return EXIT_SUCCESS;
 }
+
+
+
+////
+//  Functions
+////
 
 Map readMap(){
   std::ifstream f("map.txt");
@@ -91,14 +111,14 @@ Map readMap(){
       for (int x=0; x !=16; ++x){
         row.push_back(f.get());
       }
-      f.seekg(1, std::ios_base::cur); // Seeks past each expected newline.
+      f.seekg(1, std::ios_base::cur); // seeks past each expected newline
       charMap.push_back(row);
     }
   }
   return charMap;
 }
 
-void drawMap(const Map& v, const Tileset& map, sf::RenderWindow& window){
+void drawMap(const Map& v, const SpriteMap& map, RenderWindow& window){
   int cursorX = 0;
   int cursorY = 0;
   int c;
@@ -116,7 +136,7 @@ void drawMap(const Map& v, const Tileset& map, sf::RenderWindow& window){
   }
 }
 
-void drawObject(int c, const Coords& pos, const Tileset& map, sf::RenderWindow& window){
+void drawObject(int c, const Coords& pos, const SpriteMap& map, RenderWindow& window){
   Sprite s;
   s = map[c/16][c%16];
   s.SetPosition(pos.first*8, pos.second*8);
@@ -135,11 +155,11 @@ bool impossible(const Coords& pos, const Map& v){
       playerY < lowerYBound || playerY > upperYBound)
     return true;
   int c = v[playerY][playerX]; // segfaults if player is somehow outside map
-  if (c == 0x77) return true; // 'w' character for wall
+  if (c == 'w') return true; // 'w' character for wall
   else return false;
 }
 
-void drawMessage(string m, const Tileset& map, sf::RenderWindow& window){
+void drawMessage(string m, const SpriteMap& map, RenderWindow& window){
   Sprite s;
   int messageX = 16; // hardcoded position
   int messageY = 0;
@@ -167,7 +187,7 @@ vector<int> range(int start, int end){
 }
 
 template <class T>
-inline std::string to_string (const T& t)
+inline string to_string (const T& t)
 {
 std::stringstream ss;
 ss << t;
