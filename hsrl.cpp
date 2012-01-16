@@ -83,7 +83,7 @@ int main()
         if (App.GetInput().IsKeyDown(sf::Key::Up))    newPos.second--;
         if (App.GetInput().IsKeyDown(sf::Key::Down))  newPos.second++;
         // reset position if the destination was impossible
-        if (!impossible(newPos, charMap) && (newPos != playerPos)){
+        if (possible(newPos, charMap) && (newPos != playerPos)){
           playerPos = newPos;
           action = true; // player has made a movement
         }
@@ -95,11 +95,18 @@ int main()
 
       // imp AI
       Coords newImpPos = impPos;
+      /*
       int randDir = rand() % 4; // get a random direction
       if (randDir == 0) newImpPos.first++;
       if (randDir == 1) newImpPos.second--;
       if (randDir == 2) newImpPos.first--;
-      if (randDir == 3) newImpPos.second++;
+      if (randDir == 3) newImpPos.second++;*/
+      
+      // makes imp follow player
+      if (impPos.first - playerPos.first > 2) newImpPos.first--;
+      if (impPos.first - playerPos.first < -2) newImpPos.first++;
+      if (impPos.second - playerPos.second > 2) newImpPos.second--;
+      if (impPos.second - playerPos.second < -2) newImpPos.second++;
                
       // this does not work for some reason
       // TODO: get clean syntax for this
