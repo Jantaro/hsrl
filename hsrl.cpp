@@ -51,8 +51,10 @@ int main()
   Coords playerPos(0,0); // hardcoded (TODO) initial player position
   Coords impPos(9,12); // hardcoded (TODO)
   Coords fpsPos(16,0); // hardcoded (TODO)
+  Coords msgPos(0,16); // hardcoded (TODO)
   bool action = false; // whether the player has made an action, allowing the simulation to run in response
   string framerateText;
+  string msgText;
 
 
 
@@ -126,6 +128,9 @@ int main()
 
     framerateText = to_string(1/game.window.GetFrameTime());
     game.drawMessage(framerateText, fpsPos);
+
+    msgText = "this is a test, this is a test";
+    game.drawMessage(msgText, msgPos);
 
     game.window.Display();
   }
