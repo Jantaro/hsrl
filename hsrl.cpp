@@ -25,7 +25,7 @@ struct GameState {
   void drawMap();
   void drawObject(int, const Coords&);
   bool possible(const Coords&);
-  void drawMessage(string);
+  void drawMessage(string, const Coords&);
 
   RenderWindow window;
   SpriteMap tileset;
@@ -50,6 +50,7 @@ int main()
 
   Coords playerPos(0,0); // hardcoded (TODO) initial player position
   Coords impPos(9,12); // hardcoded (TODO)
+  Coords fpsPos(16,0); // hardcoded (TODO)
   bool action = false; // whether the player has made an action, allowing the simulation to run in response
   string framerateText;
 
@@ -124,7 +125,7 @@ int main()
     game.drawObject('@', playerPos); // player
 
     framerateText = to_string(1/game.window.GetFrameTime());
-    game.drawMessage(framerateText);
+    game.drawMessage(framerateText, fpsPos);
 
     game.window.Display();
   }
@@ -179,10 +180,10 @@ bool GameState::possible(const Coords& pos){
   else return true;
 }
 
-void GameState::drawMessage(string m){
+void GameState::drawMessage(string m, const Coords& pos){
   Sprite s;
-  int messageX = 16; // hardcoded (TODO) position
-  int messageY = 0;
+  int messageX = pos.first;
+  int messageY = pos.second;
   for (string::iterator p=m.begin(); p!=(m.end()+1);++p){
     s = tileset[(*p)/16][(*p)%16];
     s.SetPosition((messageX+(std::distance(m.begin(),p)))*8, messageY*8);
