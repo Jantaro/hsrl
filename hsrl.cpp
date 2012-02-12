@@ -19,6 +19,7 @@ using std::string;
 typedef vector<vector<int> > Map;
 typedef vector<vector<Sprite> > SpriteMap;
 typedef pair<int, int> Coords;
+typedef vector<string> MsgStack;
 
 struct GameState {
   GameState();
@@ -26,10 +27,12 @@ struct GameState {
   void drawObject(int, const Coords&);
   bool possible(const Coords&);
   void drawMessage(string, const Coords&);
+  void drawMsgStack();
 
   RenderWindow window;
   SpriteMap tileset;
   Map charMap;
+  MsgStack msgStack;
 };
 
 
@@ -55,7 +58,8 @@ int main()
   bool action = false; // whether the player has made an action, allowing the simulation to run in response
   string framerateText;
   string msgText = "this is a test, this is a test";
-
+  game.msgStack.push_back("1 foo");
+  game.msgStack.push_back("2 bar");
 
 
   ////
@@ -129,7 +133,8 @@ int main()
     framerateText = to_string(1/game.window.GetFrameTime());
     game.drawMessage(framerateText, fpsPos);
  
-    game.drawMessage(msgText, msgPos);
+    //game.drawMessage(msgText, msgPos);
+    game.drawMsgStack();
 
     game.window.Display();
   }
@@ -192,6 +197,14 @@ void GameState::drawMessage(string m, const Coords& pos){
     s = tileset[(*p)/16][(*p)%16];
     s.SetPosition((messageX+(std::distance(m.begin(),p)))*8, messageY*8);
     window.Draw(s);
+  }
+}
+
+void GameState::drawMsgStack(){
+  Coords msgStackPos(0,16);
+  for (MsgStack::size_type i = 0; i < msgStack.size(); i++){
+    drawMessage(msgStack[i], msgStackPos);
+    msgStackPos.second++;
   }
 }
 
