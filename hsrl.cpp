@@ -60,6 +60,9 @@ int main()
   string msgText = "this is a test, this is a test";
   game.msgStack.push_back("1 foo");
   game.msgStack.push_back("2 bar");
+  game.msgStack.push_back("3 pop");
+  game.msgStack.push_back("4 fiz");
+  game.msgStack.push_back("5 fuk");
 
 
   ////
@@ -202,7 +205,8 @@ void GameState::drawMessage(string m, const Coords& pos){
 
 void GameState::drawMsgStack(){
   Coords msgStackPos(0,16);
-  for (MsgStack::size_type i = 0; i < msgStack.size(); i++){
+  int msgSize = 4; // limits msgStack to display only the last four messages; hardcoded (TODO)
+  for (MsgStack::size_type i = msgStack.size() - msgSize; i < msgStack.size(); i++){
     drawMessage(msgStack[i], msgStackPos);
     msgStackPos.second++;
   }
