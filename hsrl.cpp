@@ -1,3 +1,4 @@
+//{{{ Includes
 #include <SFML/Graphics.hpp>
 using sf::Sprite;
 using sf::RenderWindow;
@@ -13,9 +14,9 @@ using std::binary_search;
 
 using std::string;
 #include <cstdlib>
+//}}}
 
-
-
+//{{{ Declarations
 typedef vector<vector<int> > Map;
 typedef vector<vector<Sprite> > SpriteMap;
 typedef pair<int, int> Coords;
@@ -34,19 +35,17 @@ struct GameState {
   Map charMap;
   MsgStack msgStack;
 };
-
+//}}}
 
 //void drawMessage(string, const SpriteMap&, RenderWindow&);
 
 vector<int> range(int, int);
 template <class T> inline string to_string(const T&);
 
+//{{{ Main
 int main()
 {
-  ////
-  //  Initialization of variables
-  ////
-  
+  //{{{ Initializations
   GameState game;
 //  game.window.SetFramerateLimit(30); // hardcoded (TODO) framerate
 
@@ -63,13 +62,9 @@ int main()
   game.msgStack.push_back("3 pop");
   game.msgStack.push_back("4 fiz");
   game.msgStack.push_back("5 fuk");
+  //}}}
 
-
-  ////
-  //  Main game loop
-  ////
-
-  // start game loop
+  //{{{ Game loop
   while (game.window.IsOpened())
   {
     sf::Event Event;
@@ -141,16 +136,12 @@ int main()
 
     game.window.Display();
   }
+  //}}}
   return EXIT_SUCCESS;
 }
+//}}}
 
-
-
-////
-//  Functions
-////
-
-
+//{{{ Functions
 void GameState::drawMap(){
   int cursorX = 0;
   int cursorY = 0;
@@ -228,8 +219,7 @@ vector<int> range(int start, int end){
   return v;
 }
 
-template <class T>
-inline string to_string (const T& t)
+template <class T> inline string to_string (const T& t)
 {
 std::stringstream ss;
 ss << t;
@@ -265,3 +255,4 @@ GameState::GameState(): window(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::C
     }
   }
 }
+//}}}
