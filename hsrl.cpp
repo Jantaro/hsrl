@@ -49,12 +49,14 @@ int main()
   GameState game;
 //  game.window.SetFramerateLimit(30); // hardcoded (TODO) framerate
 
-
   Coords playerPos(0,0); // hardcoded (TODO) initial player position
   Coords impPos(9,12); // hardcoded (TODO)
   Coords fpsPos(16,0); // hardcoded (TODO)
   Coords msgPos(0,16); // hardcoded (TODO)
+  Coords newPos;
   bool action = false; // whether the player has made an action, allowing the simulation to run in response
+  int ticks = 0;
+  Coords ticksPos(16,2);
   string framerateText;
   string msgText = "this is a test, this is a test";
   game.msgStack.push_back("1 foo");
@@ -71,20 +73,23 @@ int main()
     while (game.window.GetEvent(Event))
     {
       // close window
-      if (Event.Type == sf::Event::Closed)
-        game.window.Close();
-
-      Coords newPos = playerPos;
-      // try to move the player
-      if (action == false){ // player hasn't sent multiple keypresses
-        if (game.window.GetInput().IsKeyDown(sf::Key::Left))  newPos.first--;
-        if (game.window.GetInput().IsKeyDown(sf::Key::Right)) newPos.first++;
-        if (game.window.GetInput().IsKeyDown(sf::Key::Up))    newPos.second--;
-        if (game.window.GetInput().IsKeyDown(sf::Key::Down))  newPos.second++;
-        // reset position if the destination was impossible
-        if (game.possible(newPos) && (newPos != playerPos)){
-          playerPos = newPos;
-          action = true; // player has made a movement
+      if (Event.Type == sf::Event::Closed) game.window.Close();
+      // handle keypresses
+      if (Event.Type == sf::Event::KeyPressed){
+        if (Event.Key.Code == sf::Key::Escape) game.window.Close();
+        newPos = playerPos;
+        // try to move the player
+        if (action == false){
+          if (Event.Key.Code == sf::Key::Left)   newPos.first--;
+          if (Event.Key.Code == sf::Key::Right)  newPos.first++;
+          if (Event.Key.Code == sf::Key::Up)     newPos.second--;
+          if (Event.Key.Code == sf::Key::Down)   newPos.second++; 
+          // reset position if the destination was impossible
+          if (game.possible(newPos) && (newPos != playerPos)){
+            playerPos = newPos;
+            action = true; // player has made a movement
+            ticks++;
+          }
         }
       }
     }
@@ -130,6 +135,7 @@ int main()
 
     framerateText = to_string(1/game.window.GetFrameTime());
     game.drawMessage(framerateText, fpsPos);
+    game.drawMessage(to_string(ticks), ticksPos); 
  
     //game.drawMessage(msgText, msgPos);
     game.drawMsgStack();
@@ -219,15 +225,13 @@ vector<int> range(int start, int end){
   return v;
 }
 
-template <class T> inline string to_string (const T& t)
-{
-std::stringstream ss;
-ss << t;
-return ss.str();
+template <class T> inline string to_string (const T& t){
+  std::stringstream ss;
+  ss << t;
+  return ss.str();
 }
 
 GameState::GameState(): window(sf::VideoMode(512, 512, 32), "HSRL", sf::Style::Close), tileset(16, vector<Sprite>(16)) {  // hardcoded (TODO) size
-
   window.SetFramerateLimit(30);
 
   // construct tileset
