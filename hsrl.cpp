@@ -67,24 +67,24 @@ int main()
   //}}}
 
   //{{{ Game loop
-  while (game.window.IsOpened())
-  {
+  while (game.window.IsOpened()){
+    newPos = playerPos;
+    //{{{ Handle Events
     sf::Event Event;
-    while (game.window.GetEvent(Event))
-    {
+    while (game.window.GetEvent(Event)){
       // close window
       if (Event.Type == sf::Event::Closed) game.window.Close();
       // handle keypresses
       if (Event.Type == sf::Event::KeyPressed){
-        if (Event.Key.Code == sf::Key::Escape) game.window.Close();
-        newPos = playerPos;
-        // try to move the player
+        switch (Event.Key.Code) {
+          case sf::Key::Escape : {game.window.Close(); break;}
+          case sf::Key::Left   : {newPos.first--;      break;}
+          case sf::Key::Right  : {newPos.first++;      break;}
+          case sf::Key::Up     : {newPos.second--;     break;}
+          case sf::Key::Down   : {newPos.second++;     break;}
+          default : break;
+        }
         if (action == false){
-          if (Event.Key.Code == sf::Key::Left)   newPos.first--;
-          if (Event.Key.Code == sf::Key::Right)  newPos.first++;
-          if (Event.Key.Code == sf::Key::Up)     newPos.second--;
-          if (Event.Key.Code == sf::Key::Down)   newPos.second++; 
-          // reset position if the destination was impossible
           if (game.possible(newPos) && (newPos != playerPos)){
             playerPos = newPos;
             action = true; // player has made a movement
@@ -93,6 +93,7 @@ int main()
         }
       }
     }
+    //}}}
 
     if (action == true){ // simulation can take place
       action = false;
@@ -112,22 +113,11 @@ int main()
       if (impPos.second - playerPos.second > 2) newImpPos.second--;
       if (impPos.second - playerPos.second < -2) newImpPos.second++;
                
-      // this does not work for some reason
-      // TODO: get clean syntax for this
-      /*
-      switch (randDir){
-        case 0: newImpPos.first++;
-        case 1: newImpPos.second--;
-        case 2: newImpPos.first--;
-        case 3: newImpPos.second++;
-        default: std::cout << "some sort of problem" << std::endl;
-      }
-      */
       if (game.possible(newImpPos)) impPos = newImpPos;
     }
 
     // clear the screen
-    game.window.Clear(sf::Color(255, 255, 255));
+    game.window.Clear(sf::Color(128, 128, 128));
 
     game.drawMap();
     game.drawObject('i', impPos); // imp
@@ -193,7 +183,7 @@ void GameState::drawMessage(string m, const Coords& pos){
   Sprite s;
   int messageX = pos.first;
   int messageY = pos.second;
-  for (string::iterator p=m.begin(); p!=(m.end()+1);++p){
+  for (string::iterator p=m.begin(); p!=m.end();++p){
     s = tileset[(*p)/16][(*p)%16];
     s.SetPosition((messageX+(std::distance(m.begin(),p)))*8, messageY*8);
     window.Draw(s);
